@@ -40,7 +40,7 @@ public class Employee {
 	 * @param address Current address
 	 */
 	public Employee(String firstname, String lastname, String email, int age, String roleTitle,
-			String phoneNumber, String address) {
+			String phoneNumber, String address)  throws IllegalArgumentException {
 		super();
 		this.id = -1;
 		this.setFirstname(firstname);
@@ -121,9 +121,11 @@ public class Employee {
 		return age;
 	}
 	
-	public void setAge(int age) {
-		// TODO check if >0
-		this.age = age;
+	public void setAge(int age) throws IllegalArgumentException {
+		if (age<=0)
+			throw new IllegalArgumentException("Employee : Age can't be under or equal to zero.");
+		else
+			this.age = age;
 	}
 	
 	public String getRoleTitle() {
