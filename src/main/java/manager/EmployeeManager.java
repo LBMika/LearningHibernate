@@ -42,14 +42,23 @@ public class EmployeeManager {
 	/**
 	 * Creating an entry of Employee
 	 */
-	public boolean create(Employee e) throws Exception{
+	public boolean create(Employee employee) throws Exception{
 		boolean result;
-		if (e!=null && e.isValidForCreation()) {
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(e);
-			session.getTransaction().commit();
-			session.close();
+		if (employee!=null && employee.isValidForCreation()) {
+			Session session = null;
+			try {
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				session.save(employee);
+				session.getTransaction().commit();
+			}
+			catch(Exception e) {
+				result = false;
+				throw e;
+			}
+			finally {
+				if (session!=null) session.close();
+			}
 			result = true;
 		}
 		else
