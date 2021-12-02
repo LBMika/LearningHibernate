@@ -30,8 +30,7 @@ public class Employee {
 	}
 	
 	/**
-	 * Full constructor
-	 * @param id DB id
+	 * Full constructor without id
 	 * @param firstname First name
 	 * @param lastname Last name
 	 * @param email Email
@@ -40,10 +39,10 @@ public class Employee {
 	 * @param phoneNumber Phone number
 	 * @param address Current address
 	 */
-	public Employee(long id, String firstname, String lastname, String email, int age, String roleTitle,
+	public Employee(String firstname, String lastname, String email, int age, String roleTitle,
 			String phoneNumber, String address) {
 		super();
-		this.id = id;
+		this.id = -1;
 		this.setFirstname(firstname);
 		this.setLastname(lastname);
 		this.setEmail(email);
@@ -93,7 +92,7 @@ public class Employee {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
