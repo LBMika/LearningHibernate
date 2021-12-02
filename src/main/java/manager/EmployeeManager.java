@@ -1,6 +1,9 @@
 package manager;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,7 +19,7 @@ public class EmployeeManager {
 	/**
 	 * Loading an hibernate session
 	 */
-	protected void setup() {
+	public void setup() {
 		// Get hibernate configuration from cfg file to create a registry
 		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 		try {
@@ -32,14 +35,14 @@ public class EmployeeManager {
 	/**
 	 * Deleting an hibernate session
 	 */
-	protected void exit() {
+	public void exit() {
 		if (sessionFactory!=null) sessionFactory.close();
 	}
 	
 	/**
-	 * Creating an entry
+	 * Creating an entry of Employee
 	 */
-	protected boolean create(Employee e) {
+	public boolean create(Employee e) throws Exception{
 		boolean result;
 		if (e!=null && e.isValidForCreation()) {
 			Session session = sessionFactory.openSession();
@@ -55,9 +58,9 @@ public class EmployeeManager {
 	}
 	
 	/**
-	 * Reading an entry
+	 * Reading an entry of Employee
 	 */
-	protected Employee read(long id) {
+	public Employee read(long id) {
 		Session session = sessionFactory.openSession();
 		Employee e = session.get(Employee.class, id);
 		session.close();
@@ -68,18 +71,24 @@ public class EmployeeManager {
 	 * Reading all entry in table employee
 	 * @return All the employee of Touloulou
 	 */
-	protected List<Employee> getAll() {
+	public List<Employee> readAll() {
 		List<Employee> result;
 		Session session = sessionFactory.openSession();
-		result = session.createQuery("SELECT * FROM touloulou.employee", Employee.class).getResultList();
-		session.close();
+		CriteriaQuery<Employee> criteriaQuery = session.getCriteriaBuilder().createQuery(Employee.class);
+	    try
+	    {
+	        result = session.createQuery(criteriaQuery).getResultList();
+	    } catch (Exception e) {
+	        result =  new ArrayList<Employee>();
+	    }
+	    session.close();
 		return result;
 	}
 	
 	/**
-	 * Updating an entry
+	 * Updating an entry of Employee
 	 */
-	protected void update(long id, Employee employee) {
+	public void update(long id, Employee employee) {
 		Employee old = this.read(id);
 		old.init(employee);
 		
@@ -91,9 +100,9 @@ public class EmployeeManager {
 	}
 	
 	/**
-	 * Deleting an entry
+	 * Deleting an entry of Employee
 	 */
-	protected void delete(Employee e) {
+	public void delete(Employee e) {
 		if (e.getId()!=-1) {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -101,19 +110,5 @@ public class EmployeeManager {
 			session.getTransaction().commit();
 			session.close();
 		}
-	}
-	
-	/**
-	 * App entry point
-	 * @param args Args
-	 */
-	public static void main(String[] args) {
-		EmployeeManager manager = new EmployeeManager();
-		
-		manager.setup();
-		
-		
-		
-		manager.exit();
 	}
 }
