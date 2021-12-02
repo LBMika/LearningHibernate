@@ -2,6 +2,9 @@ package entity;
 
 import javax.persistence.*;
 
+/**
+ * A representation of an employee from Touloulou
+ */
 @Entity
 @Table(name="employee")
 public class Employee {
@@ -17,12 +20,43 @@ public class Employee {
 	private String phoneNumber;
 	private String address;
 	
+	/**
+	 * Default constructor
+	 */
 	public Employee() {
 		super();
 		this.id = -1;
 		this.age = -1;
 	}
 	
+	/**
+	 * Full constructor
+	 * @param id DB id
+	 * @param firstname First name
+	 * @param lastname Last name
+	 * @param email Email
+	 * @param age Age
+	 * @param roleTitle Title of the employee position
+	 * @param phoneNumber Phone number
+	 * @param address Current address
+	 */
+	public Employee(long id, String firstname, String lastname, String email, int age, String roleTitle,
+			String phoneNumber, String address) {
+		super();
+		this.id = id;
+		this.setFirstname(firstname);
+		this.setLastname(lastname);
+		this.setEmail(email);
+		this.setAge(age);
+		this.setRoleTitle(roleTitle);
+		this.setPhoneNumber(phoneNumber);
+		this.setAddress(address);
+	}
+
+	/**
+	 * Check if all attributes are initialize with valid value (except id)
+	 * @return True if valid for creation
+	 */
 	public boolean isValidForCreation() {
 		boolean result;
 		
@@ -36,7 +70,10 @@ public class Employee {
 		return result;
 	}
 	
-
+	/**
+	 * Copy into the current instance the correctly initialized attributes from the parameter 'employee' 
+	 * @param employee An instance of Employee
+	 */
 	public void init(Employee employee) {
 		if (employee.firstname!=null && !employee.firstname.isBlank()) this.firstname = employee.firstname;
 		if (employee.lastname!=null && !employee.lastname.isBlank()) this.lastname = employee.lastname;
@@ -46,6 +83,8 @@ public class Employee {
 		if (employee.phoneNumber!=null && !employee.phoneNumber.isBlank()) this.phoneNumber = employee.phoneNumber;;
 		if (employee.address!=null && !employee.address.isBlank()) this.address = employee.address;
 	}
+	
+	// Getters/Setters block
 	
 	public long getId() {
 		return id;
