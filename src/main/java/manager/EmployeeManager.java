@@ -70,7 +70,7 @@ public class EmployeeManager {
 	}
 	
 	/**
-	 * Reading an entry of Employee
+	 * Reading an entry of Employee by its id
 	 */
 	public Employee read(long id) {
 		Session session = sessionFactory.openSession();
@@ -78,6 +78,10 @@ public class EmployeeManager {
 		session.close();
 		return e;
 	}
+	
+	/**
+	 * Reading an entry of Employee by its email
+	 */
 	public Employee read(Employee employee) throws Exception {
 		Session session = null;
 		Employee result;
@@ -141,6 +145,7 @@ public class EmployeeManager {
 	 * @throws Exception 
 	 */
 	public void delete(Employee employee) throws Exception {
+		// Delete by id
 		if (employee.getId()!=-1) {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -149,6 +154,7 @@ public class EmployeeManager {
 			session.close();
 		}
 		else
+		// Delete by email
 		if (employee.getEmail()!=null && !employee.getEmail().isBlank()) {
 			Session session = null;
 			try {
