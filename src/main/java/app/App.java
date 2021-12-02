@@ -55,13 +55,42 @@ public class App {
 
 		// Deleting entry id 12 if present
 		Employee toDelete = manager.read(12L);
-		if (toDelete!=null) manager.delete(toDelete);
+		if (toDelete!=null) {
+			try {
+				manager.delete(toDelete);
+			} catch (Exception e4) {
+				// TODO Auto-generated catch block
+				e4.printStackTrace();
+			}
+		}
 		
 		// Display all entries from employee table
 		List<Employee> employees = manager.readAll();
 		if (employees!=null) {
 			for (Employee e : employees)
 				System.out.println(e);
+		}
+		
+		// Get employee by email
+		System.out.println("*****************");
+		Employee test = new Employee();
+		test.setEmail("jeanjean@jean.com");
+		try {
+			System.out.println(manager.read(test));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Delete employee by email
+		System.out.println("*****************");
+		test = new Employee();
+		test.setEmail("sgdsg@gg.com");
+		try {
+			manager.delete(test);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		manager.exit();

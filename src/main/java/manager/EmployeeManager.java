@@ -3,7 +3,10 @@ package manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -75,6 +78,27 @@ public class EmployeeManager {
 		session.close();
 		return e;
 	}
+	public Employee read(Employee employee) throws Exception {
+		Session session = null;
+		Employee result;
+		try {
+			session = sessionFactory.openSession();
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+			Root<Employee> root = criteriaQuery.from(Employee.class);
+			criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), employee.getEmail()));
+			result = session.createQuery(criteriaQuery).getResultList().get(0);
+		}
+		catch (Exception e) {
+			result = null;
+			throw e;
+		}
+		finally {
+			if (session!=null) session.close();
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * Reading all entry in table employee
@@ -82,15 +106,19 @@ public class EmployeeManager {
 	 */
 	public List<Employee> readAll() {
 		List<Employee> result;
-		Session session = sessionFactory.openSession();
-		CriteriaQuery<Employee> criteriaQuery = session.getCriteriaBuilder().createQuery(Employee.class);
+		Session session = null;
 	    try
 	    {
+	    	session = sessionFactory.openSession();
+			CriteriaQuery<Employee> criteriaQuery = session.getCriteriaBuilder().createQuery(Employee.class);
 	        result = session.createQuery(criteriaQuery).getResultList();
 	    } catch (Exception e) {
 	        result =  new ArrayList<Employee>();
 	    }
-	    session.close();
+	    finally {
+	    	if (session!=null) session.close();
+	    }
+	    
 		return result;
 	}
 	
@@ -110,14 +138,35 @@ public class EmployeeManager {
 	
 	/**
 	 * Deleting an entry of Employee
+	 * @throws Exception 
 	 */
-	public void delete(Employee e) {
-		if (e.getId()!=-1) {
+	public void delete(Employee employee) throws Exception {
+		if (employee.getId()!=-1) {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			session.delete(e);
+			session.delete(employee);
 			session.getTransaction().commit();
 			session.close();
+		}
+		else
+		if (employee.getEmail()!=null && !employee.getEmail().isBlank()) {
+			Session session = null;
+			try {
+				session = sessionFactory.openSession();
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+				CriteriaDelete<Employee> criteriaDelete = criteriaBuilder.createCriteriaDelete(Employee.class);
+				Root<Employee> root = criteriaDelete.from(Employee.class);
+				criteriaDelete.where(criteriaBuilder.equal(root.get("email"), employee.getEmail()));
+				session.beginTransaction();
+				session.createQuery(criteriaDelete).executeUpdate();
+				session.getTransaction().commit();
+			}
+			catch (Exception e) {
+				throw e;
+			}
+			finally {
+				if (session!=null) session.close();
+			}
 		}
 	}
 }
