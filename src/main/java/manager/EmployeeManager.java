@@ -85,22 +85,25 @@ public class EmployeeManager {
 	public Employee read(Employee employee) throws Exception {
 		Session session = null;
 		Employee result;
-		try {
-			session = sessionFactory.openSession();
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
-			Root<Employee> root = criteriaQuery.from(Employee.class);
-			criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), employee.getEmail()));
-			result = session.createQuery(criteriaQuery).getResultList().get(0);
+		if (employee.getId()==-1) {
+			try {
+				session = sessionFactory.openSession();
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+				CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+				Root<Employee> root = criteriaQuery.from(Employee.class);
+				criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), employee.getEmail()));
+				result = session.createQuery(criteriaQuery).getResultList().get(0);
+			}
+			catch (Exception e) {
+				result = null;
+				throw e;
+			}
+			finally {
+				if (session!=null) session.close();
+			}
 		}
-		catch (Exception e) {
-			result = null;
-			throw e;
-		}
-		finally {
-			if (session!=null) session.close();
-		}
-		
+		else
+			result = this.read(employee.getId());
 		return result;
 	}
 	
