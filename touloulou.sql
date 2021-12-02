@@ -1,11 +1,11 @@
 create database touloulou;
 use touloulou;
 create table employee (
-	id int(11) not null auto_increment,
+	id int not null auto_increment,
     firstname varchar(128) not null,
     lastname varchar(128) not null,
     email varchar(45) not null,
-    age int(3) not null,
+    age tinyint unsigned not null,
     roleTitle varchar(45) not null,
     phoneNumber varchar(10) not null,
     address varchar(128) not null,
