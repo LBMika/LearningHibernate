@@ -16,9 +16,7 @@ public class App {
 		
 		manager.setup();
 		
-		
 		// First employee
-		/*
 		Employee e1 = new Employee("Toto", "Titi", "toto@titi.com", 10, "Manager", "0712695945", "56923 Toto City");
 		try {
 			if (!manager.create(e1)) {
@@ -28,10 +26,9 @@ public class App {
 			System.err.println("Can't create employee : "+e1);
 			// e.printStackTrace();
 		}
-		*/
+		
 		
 		// Second employee
-		/*
 		Employee e2 = new Employee("Jean", "Jean", "jeanjean@jean.com", 10, "Jean", "0714545465", "11111 Jean");
 		try {
 			if (!manager.create(e2)) {
@@ -41,10 +38,8 @@ public class App {
 			System.err.println("Can't create employee : "+e2);
 			//e.printStackTrace();
 		}
-		*/
 		
 		// Third employee
-		/*
 		Employee e3 = new Employee("fsdggsd", "sdgsgsd", "sgdsg@gg.com", 52, "dddddd", "1111111111", "00000 Nulpart");
 		try {
 			if (!manager.create(e3)) {
@@ -54,12 +49,15 @@ public class App {
 			System.err.println("Can't create employee : "+e3);
 			//e.printStackTrace();
 		}
-		*/
+
+		// Reading entry id 11
 		System.out.println(manager.read(11L));
 
+		// Deleting entry id 12 if present
 		Employee toDelete = manager.read(12L);
 		if (toDelete!=null) manager.delete(toDelete);
 		
+		// Display all entries from employee table
 		List<Employee> employees = manager.readAll();
 		if (employees!=null) {
 			for (Employee e : employees)
